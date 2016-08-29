@@ -1,4 +1,4 @@
 
 import CalculatorController from './controller'
-angular.module('calculatorApp', [])
+export default angular.module('calculatorApp', [])
     .controller('CalculatorController',CalculatorController)

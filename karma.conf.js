@@ -1,6 +1,15 @@
 // Karma configuration
 // Generated on Mon May 18 2015 13:35:51 GMT+0200 (CEST)
+var cover = require('browserify-istanbul');
+var babelify = require('babelify');
 
+var coverOptions = {
+  ignore: [],
+  instrumenterConfig: {
+    embedSource: true
+  },
+  defaultIgnore: true
+}
 module.exports = function(config) {
   config.set({
 
@@ -23,7 +32,13 @@ module.exports = function(config) {
 
     browserify: {
       debug: true,
-      transform: ['babelify']
+      configure: function(bundle){
+        bundle.on('prebundle', function(){
+          bundle
+              .transform(babelify)
+              .transform(cover(coverOptions));
+        });
+      }
     },
     // list of files to exclude
     exclude: [
@@ -33,7 +48,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'app/*.js': ['browserify','coverage']
+      'app/*.js': ['browserify']//,'coverage']
 
     },
 
@@ -63,7 +78,7 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome'],
+    browsers: ['PhantomJS'],
 
     coverageReporter: {
       type : 'html',
